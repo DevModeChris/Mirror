@@ -245,15 +245,9 @@ namespace Mirror
             else if (isClient) UpdateClient();
         }
 
-        // teleport to force position without snapshot interpolation.
-        // otherwise it would interpolate to a (far away) new position.
-        // => manually calling Teleport is the only 100% reliable solution.
-        [ClientRpc]
-        public void RpcTeleport(Vector3 destination)
+        // common Teleport code for client->server and server->client
+        void OnTeleport(Vector3 destination)
         {
-            // TODO check permissions? should server always be allowed to teleport?
-            // even if client authority?
-
             // reset any in-progress interpolation & buffers
             Reset();
 
@@ -268,7 +262,26 @@ namespace Mirror
             // -> just need to be sure to also initialize remoteTime etc.?
         }
 
-        // TODO client -> server teleport as well?
+        // server->client teleport to force position without interpolation.
+        // otherwise it would interpolate to a (far away) new position.
+        // => manually calling Teleport is the only 100% reliable solution.
+        [ClientRpc]
+        public void RpcTeleport(Vector3 destination)
+        {
+            // TODO check permissions? should server always be allowed to teleport?
+            // even if client authority?
+            OnTeleport(destination);
+        }
+
+        // client->server teleport to force position without interpolation.
+        // otherwise it would interpolate to a (far away) new position.
+        // => manually calling Teleport is the only 100% reliable solution.
+        [Command]
+        public void CmdTeleport(Vector3 destination)
+        {
+            // TODO check permissions. only if client authority.
+            OnTeleport(destination);
+        }
 
         void Reset()
         {
