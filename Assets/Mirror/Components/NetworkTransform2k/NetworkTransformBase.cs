@@ -270,6 +270,7 @@ namespace Mirror
         {
             // TODO check permissions? should server always be allowed to teleport?
             // even if client authority?
+            // TODO what about host mode?
             OnTeleport(destination);
         }
 
@@ -280,6 +281,7 @@ namespace Mirror
         public void CmdTeleport(Vector3 destination)
         {
             // TODO check permissions. only if client authority.
+            // TODO what about host mode?
             OnTeleport(destination);
         }
 
