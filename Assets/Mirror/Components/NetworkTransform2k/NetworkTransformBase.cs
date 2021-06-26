@@ -255,6 +255,10 @@ namespace Mirror
             // and reset remoteTime so it's initialized to first snapshot again
             clientRemoteServerTime = 0;
             serverRemoteClientTime = 0;
+
+            // reset interpolation time too so we start at t=0 next time
+            clientInterpolationTime = 0;
+            serverInterpolationTime = 0;
         }
 
         void OnDisable() => Reset();
