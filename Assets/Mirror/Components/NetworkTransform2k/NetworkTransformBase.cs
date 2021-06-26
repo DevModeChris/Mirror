@@ -245,6 +245,31 @@ namespace Mirror
             else if (isClient) UpdateClient();
         }
 
+        // teleport to force position without snapshot interpolation.
+        // otherwise it would interpolate to a (far away) new position.
+        // => manually calling Teleport is the only 100% reliable solution.
+        [ClientRpc]
+        public void RpcTeleport(Vector3 destination)
+        {
+            // TODO check permissions? should server always be allowed to teleport?
+            // even if client authority?
+
+            // reset any in-progress interpolation & buffers
+            Reset();
+
+            // set the new position.
+            // interpolation will automatically continue.
+            transform.position = destination;
+
+            // TODO
+            // what if we still receive a snapshot from before the interpolation?
+            // it could easily happen over unreliable.
+            // -> maybe add destionation as first entry?
+            // -> just need to be sure to also initialize remoteTime etc.?
+        }
+
+        // TODO client -> server teleport as well?
+
         void Reset()
         {
             // disabled objects aren't updated anymore.
