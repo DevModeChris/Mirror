@@ -268,8 +268,11 @@ namespace Mirror
         [ClientRpc]
         public void RpcTeleport(Vector3 destination)
         {
-            // TODO check permissions? should server always be allowed to teleport?
-            // even if client authority?
+            // NOTE: even in client authority mode, the server is always allowed
+            //       to teleport the player. for example:
+            //       * CmdEnterPortal() might teleport the player
+            //       * Some people use client authority with server sided checks
+            //         so the server should be able to reset position if needed.
 
             // TODO what about host mode?
             OnTeleport(destination);
